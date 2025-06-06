@@ -2,7 +2,6 @@ const socket = io();
 
 let roomId = new URLSearchParams(window.location.search).get("room") || "ShadsRoom123";
 document.getElementById("roomCode").innerText = roomId;
-
 socket.emit("join", roomId);
 
 function switchTab(tabId) {
@@ -21,7 +20,7 @@ function sendMessage() {
 function sendPrivate() {
   const msg = document.getElementById("pmInput").value;
   const to = document.getElementById("pmUser").value;
-  if (msg) {
+  if (msg && to) {
     socket.emit("private", { to, msg });
     document.getElementById("pmInput").value = "";
   }
@@ -55,6 +54,20 @@ function generateQRCode() {
     if (error) console.error(error);
     else qrDiv.appendChild(canvas);
   });
+}
+
+function createRoom() {
+  const newRoom = document.getElementById("newRoom").value.trim();
+  if (newRoom) {
+    window.location.href = `/?room=${newRoom}`;
+  }
+}
+
+function joinRoom() {
+  const joinRoom = document.getElementById("joinRoom").value.trim();
+  if (joinRoom) {
+    window.location.href = `/?room=${joinRoom}`;
+  }
 }
 
 socket.on("message", ({ room, msg }) => {

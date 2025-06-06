@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ShadsApp</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
-
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" href="icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script defer src="app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/service-worker.js')
@@ -18,60 +18,57 @@
   </script>
 </head>
 <body>
-  <div id="app">
-    <div class="header">🌟 ShadsApp</div>
-
-    <div class="tabs">
-      <button onclick="switchTab('group')">💬 Group</button>
-      <button onclick="switchTab('pm')">👤 Private</button>
-      <button onclick="switchTab('qr')">🔗 QR</button>
-      <button onclick="switchTab('media')">📁 Media</button>
-      <button onclick="switchTab('settings')">⚙️ Settings</button>
-    </div>
-
-    <div id="group" class="tabContent">
-      <div class="room">Room: <span id="roomCode">ShadsRoom123</span></div>
-      <div id="chatbox"></div>
-      <input type="text" id="msgInput" placeholder="Type a group message..." />
-      <button onclick="sendMessage()">Send</button>
-      <button onclick="recordVoice()">🎙️</button>
-    </div>
-
-    <div id="pm" class="tabContent" style="display: none;">
-      <select id="pmUser">
-        <option value="User1">User1</option>
-        <option value="User2">User2</option>
-      </select>
-      <div id="pmBox"></div>
-      <input type="text" id="pmInput" placeholder="Type a private message..." />
-      <button onclick="sendPrivate()">Send</button>
-    </div>
-
-    <div id="qr" class="tabContent" style="display: none;">
-      <p class="room">QR Code for Room</p>
-      <div id="qrcode" style="margin: 10px auto;"></div>
-      <button onclick="generateQRCode()">Generate QR</button>
-    </div>
-
-    <div id="media" class="tabContent" style="display: none;">
-      <input type="file" id="mediaFile" />
-      <button onclick="sendMedia()">📎 Share File</button>
-      <div id="mediaBox"></div>
-    </div>
-
-    <div id="settings" class="tabContent" style="display: none;">
-      <h3>Settings</h3>
-      <label>Username: <input type="text" id="username" /></label><br/><br/>
-      <label>Theme:
-        <select id="themeSelect" onchange="changeTheme(this.value)">
-          <option value="dark">Dark</option>
-          <option value="light">Light</option>
-        </select>
-      </label>
-    </div>
+  <div class="tabbar">
+    <button onclick="switchTab('homeTab')">Home</button>
+    <button onclick="switchTab('groupTab')">Group</button>
+    <button onclick="switchTab('privateTab')">PM</button>
+    <button onclick="switchTab('mediaTab')">Media</button>
+    <button onclick="switchTab('qrTab')">QR</button>
+    <button onclick="switchTab('settingsTab')">⚙</button>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="app.js"></script>
+  <div id="homeTab" class="tabContent">
+    <h2>Welcome to ShadsApp</h2>
+    <input id="newRoom" placeholder="Enter room name" />
+    <button onclick="createRoom()">Create Room</button><br><br>
+    <input id="joinRoom" placeholder="Enter room to join" />
+    <button onclick="joinRoom()">Join Room</button><br><br>
+    <h3>Current Room: <span id="roomCode">ShadsRoom123</span></h3>
+  </div>
+
+  <div id="groupTab" class="tabContent" style="display:none;">
+    <h2>Group Chat</h2>
+    <div id="chatbox" class="box"></div>
+    <input id="msgInput" placeholder="Type a message" />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <div id="privateTab" class="tabContent" style="display:none;">
+    <h2>Private Chat</h2>
+    <input id="pmUser" placeholder="To user..." />
+    <input id="pmInput" placeholder="Private message" />
+    <button onclick="sendPrivate()">Send PM</button>
+    <div id="pmBox" class="box"></div>
+  </div>
+
+  <div id="mediaTab" class="tabContent" style="display:none;">
+    <h2>Media Sharing</h2>
+    <input type="file" id="mediaFile" />
+    <button onclick="sendMedia()">Upload</button>
+    <div id="mediaBox" class="box"></div>
+  </div>
+
+  <div id="qrTab" class="tabContent" style="display:none;">
+    <h2>Room QR Code</h2>
+    <button onclick="generateQRCode()">Generate QR</button>
+    <div id="qrcode"></div>
+  </div>
+
+  <div id="settingsTab" class="tabContent" style="display:none;">
+    <h2>Settings</h2>
+    <button onclick="changeTheme('dark')">Dark</button>
+    <button onclick="changeTheme('light')">Light</button>
+    <button onclick="recordVoice()">🎤 Voice Record</button>
+  </div>
 </body>
 </html>
