@@ -1,92 +1,62 @@
-
 const socket = io();
-let currentRoom = generateRoom();
+let currentRoom = "";
+
+function joinRoom() {
+  const room = document.getElementById("roomInput").value.trim();
+  if (!room) return;
+  currentRoom = room;
+  socket.emit("join-room", room);
+  document.getElementById("chatBox").innerHTML = "";
+}
 
 function sendMessage() {
-  const input = document.getElementById('msgInput');
-  const msg = input.value;
-  if (msg.trim()) {
-    socket.emit('message', { text: msg, room: currentRoom });
-    input.value = '';
-  }
+  const msgInput = document.getElementById("msgInput");
+  const message = msgInput.value.trim();
+  if (!message || !currentRoom) return;
+
+  socket.emit("send-message", {
+    room: currentRoom,
+    message,
+    sender: "You",
+  });
+
+  msgInput.value = "";
 }
 
-socket.on('message', (data) => {
-  const chat = document.getElementById('chatbox');
-  const div = document.createElement('div');
-  div.textContent = data.text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+socket.on("chat-history", (messages) => {
+  messages.forEach((msg) => renderMessage(msg));
 });
 
-function sendPrivate() {
-  const input = document.getElementById('pmInput');
-  const msg = input.value;
-  const to = document.getElementById('pmUser').value;
-  if (msg.trim()) {
-    socket.emit('private', { text: msg, to });
-    input.value = '';
-  }
-}
-
-socket.on('private', (data) => {
-  const chat = document.getElementById('pmBox');
-  const div = document.createElement('div');
-  div.textContent = `[PM] ${data.text}`;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+socket.on("receive-message", (msg) => {
+  renderMessage(msg);
 });
 
-function generateRoom() {
-  const id = Math.random().toString(36).substring(2, 8);
-  document.getElementById('roomCode').textContent = id;
-  generateQRCode(id);
-  return id;
+function renderMessage(msg) {
+  const chatBox = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.innerHTML = `<strong>${msg.sender}:</strong> ${msg.message}`;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function generateQRCode(code) {
-  document.getElementById('qrcode').innerHTML = "";
-  const qr = new QRCode(document.getElementById("qrcode"), {
-    text: window.location.origin + "?room=" + code,
-    width: 128,
-    height: 128
+function generateQR() {
+  const room = document.getElementById("roomInput").value.trim();
+  if (!room) return;
+
+  const url = window.location.origin + "?room=" + encodeURIComponent(room);
+  const container = document.getElementById("qrContainer");
+  container.innerHTML = "";
+  QRCode.toCanvas(document.createElement("canvas"), url, { width: 200 }, (err, canvas) => {
+    if (!err) container.appendChild(canvas);
   });
 }
 
-function joinRoom(room) {
-  currentRoom = room;
-  document.getElementById('roomCode').textContent = room;
-}
-
+// Auto join room from URL
 window.onload = () => {
   const params = new URLSearchParams(window.location.search);
-  if (params.has("room")) {
-    joinRoom(params.get("room"));
+  const room = params.get("room");
+  if (room) {
+    document.getElementById("roomInput").value = room;
+    joinRoom();
   }
-}
-
-// Tab switcher
-function switchTab(tab) {
-  document.querySelectorAll(".tabContent").forEach(e => e.style.display = "none");
-  document.getElementById(tab).style.display = "block";
-}
-
-function sendMedia() {
-  const fileInput = document.getElementById("mediaFile");
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const mediaBox = document.getElementById("mediaBox");
-    const div = document.createElement("div");
-    div.textContent = `📎 Shared: ${file.name}`;
-    mediaBox.appendChild(div);
-  }
-}
-
-function changeTheme(theme) {
-  document.body.style.background = theme === 'dark' ? '#0a0a0a' : '#ffffff';
-  document.body.style.color = theme === 'dark' ? '#fff' : '#000';
-}
-
-function recordVoice() {
-  alert('🎤 Voice recording not implemented — this is a placeholder!');
-}
+};
