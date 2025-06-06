@@ -10,12 +10,56 @@
 <body>
   <div id="app">
     <div class="header">🌙 ShadsApp</div>
-    <div class="room">Room: <span id="roomCode">-</span></div>
-    <div id="qrcode"></div>
-    <div id="chatbox"></div>
-    <input type="text" id="msgInput" placeholder="Type a message..." />
-    <button onclick="sendMessage()">Send</button>
+
+    <div class="tabs">
+      <button onclick="switchTab('group')">Group</button>
+      <button onclick="switchTab('pm')">Private</button>
+      <button onclick="switchTab('qr')">QR</button>
+      <button onclick="switchTab('media')">Media</button>
+      <button onclick="switchTab('settings')">⚙️</button>
+    </div>
+
+    <div id="group" class="tabContent">
+      <div class="room">Room: <span id="roomCode">-</span></div>
+      <div id="chatbox"></div>
+      <input type="text" id="msgInput" placeholder="Type a group message..." />
+      <button onclick="sendMessage()">Send</button>
+      <button onclick="recordVoice()">🎙️</button>
+    </div>
+
+    <div id="pm" class="tabContent" style="display: none;">
+      <select id="pmUser">
+        <option value="User1">User1</option>
+        <option value="User2">User2</option>
+      </select>
+      <div id="pmBox"></div>
+      <input type="text" id="pmInput" placeholder="Type a private message..." />
+      <button onclick="sendPrivate()">Send</button>
+    </div>
+
+    <div id="qr" class="tabContent" style="display: none;">
+      <p class="room">Room QR:</p>
+      <div id="qrcode" style="margin-bottom: 20px;"></div>
+    </div>
+
+    <div id="media" class="tabContent" style="display: none;">
+      <input type="file" id="mediaFile" />
+      <button onclick="sendMedia()">📎 Share File</button>
+      <div id="mediaBox"></div>
+    </div>
+
+    <div id="settings" class="tabContent" style="display: none;">
+      <h3>Settings</h3>
+      <label>Username: <input type="text" id="username" /></label><br/><br/>
+      <label>Theme:
+        <select id="themeSelect" onchange="changeTheme(this.value)">
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
+      </label>
+    </div>
   </div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script src="app.js"></script>
 </body>
