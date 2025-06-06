@@ -48,7 +48,6 @@ io.on("connection", (socket) => {
       };
       rooms[room].push(aiMsg);
       io.to(room).emit("receive-message", aiMsg);
-    }
   });
 
   socket.on("disconnect", () => {
