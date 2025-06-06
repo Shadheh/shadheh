@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ShadsApp</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1/qrcode.min.js"></script>
 </head>
 <body>
   <div id="app">
-    <div class="header">🌟 ShadsApp</div>
+    <div class="header">🌙 ShadsApp</div>
+    <div class="room">Room: <span id="roomCode">-</span></div>
+    <div id="qrcode"></div>
     <div id="chatbox"></div>
     <input type="text" id="msgInput" placeholder="Type a message..." />
     <button onclick="sendMessage()">Send</button>
