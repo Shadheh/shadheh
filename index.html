@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ShadsApp</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
 </head>
 <body>
   <div id="app">
-    <div class="header">🌙 ShadsApp</div>
+    <div class="header">🌟 ShadsApp</div>
 
     <div class="tabs">
-      <button onclick="switchTab('group')">Group</button>
-      <button onclick="switchTab('pm')">Private</button>
-      <button onclick="switchTab('qr')">QR</button>
-      <button onclick="switchTab('media')">Media</button>
-      <button onclick="switchTab('settings')">⚙️</button>
+      <button onclick="switchTab('group')">💬 Group</button>
+      <button onclick="switchTab('pm')">👤 Private</button>
+      <button onclick="switchTab('qr')">🔗 QR</button>
+      <button onclick="switchTab('media')">📁 Media</button>
+      <button onclick="switchTab('settings')">⚙️ Settings</button>
     </div>
 
     <div id="group" class="tabContent">
-      <div class="room">Room: <span id="roomCode">-</span></div>
+      <div class="room">Room: <span id="roomCode">ShadsRoom123</span></div>
       <div id="chatbox"></div>
       <input type="text" id="msgInput" placeholder="Type a group message..." />
       <button onclick="sendMessage()">Send</button>
@@ -38,8 +38,9 @@
     </div>
 
     <div id="qr" class="tabContent" style="display: none;">
-      <p class="room">Room QR:</p>
-      <div id="qrcode" style="margin-bottom: 20px;"></div>
+      <p class="room">QR Code for Room</p>
+      <div id="qrcode" style="margin: 10px auto;"></div>
+      <button onclick="generateQRCode()">Generate QR</button>
     </div>
 
     <div id="media" class="tabContent" style="display: none;">

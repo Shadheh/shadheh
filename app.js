@@ -53,3 +53,13 @@ socket.on("private", ({ to, msg }) => {
   div.textContent = `🔒 ${to}: ${msg}`;
   document.getElementById("pmBox").appendChild(div);
 });
+
+function generateQRCode() {
+  const roomCode = document.getElementById("roomCode").innerText;
+  const qrDiv = document.getElementById("qrcode");
+  qrDiv.innerHTML = "";
+  QRCode.toCanvas(document.createElement("canvas"), roomCode, function (error, canvas) {
+    if (error) console.error(error);
+    else qrDiv.appendChild(canvas);
+  });
+}
