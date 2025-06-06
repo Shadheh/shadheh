@@ -1,83 +1,79 @@
-const socket = io();
-
-let roomId = new URLSearchParams(window.location.search).get("room") || "ShadsRoom123";
-document.getElementById("roomCode").innerText = roomId;
-socket.emit("join", roomId);
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+}
 
 function switchTab(tabId) {
-  document.querySelectorAll(".tabContent").forEach(tab => tab.style.display = "none");
-  document.getElementById(tabId).style.display = "block";
+  document.querySelectorAll('.tabContent').forEach(tab => {
+    tab.style.display = 'none';
+  });
+  document.getElementById(tabId).style.display = 'block';
 }
 
 function sendMessage() {
   const msg = document.getElementById("msgInput").value;
-  if (msg) {
-    socket.emit("message", { room: roomId, msg });
+  const box = document.getElementById("chatbox");
+  if (msg.trim()) {
+    box.innerHTML += `<div><strong>You:</strong> ${msg}</div>`;
     document.getElementById("msgInput").value = "";
   }
 }
 
 function sendPrivate() {
+  const user = document.getElementById("pmUser").value;
   const msg = document.getElementById("pmInput").value;
-  const to = document.getElementById("pmUser").value;
-  if (msg && to) {
-    socket.emit("private", { to, msg });
+  const box = document.getElementById("pmBox");
+  if (user.trim() && msg.trim()) {
+    box.innerHTML += `<div><strong>To ${user}:</strong> ${msg}</div>`;
     document.getElementById("pmInput").value = "";
   }
 }
 
 function sendMedia() {
-  const fileInput = document.getElementById("mediaFile");
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const mediaBox = document.getElementById("mediaBox");
-    const div = document.createElement("div");
-    div.textContent = `📎 Shared: ${file.name}`;
-    mediaBox.appendChild(div);
+  const file = document.getElementById("mediaFile").files[0];
+  const box = document.getElementById("mediaBox");
+  if (file) {
+    box.innerHTML += `<div><strong>Shared:</strong> ${file.name}</div>`;
   }
 }
 
-function changeTheme(theme) {
-  document.body.style.background = theme === 'dark' ? '#0a0a0a' : '#ffffff';
-  document.body.style.color = theme === 'dark' ? '#fff' : '#000';
-}
-
-function recordVoice() {
-  alert('🎤 Voice recording placeholder');
-}
-
 function generateQRCode() {
-  const qrDiv = document.getElementById("qrcode");
-  qrDiv.innerHTML = "";
-  const url = `${window.location.origin}?room=${roomId}`;
-  QRCode.toCanvas(document.createElement("canvas"), url, function (error, canvas) {
-    if (error) console.error(error);
-    else qrDiv.appendChild(canvas);
+  const roomCode = prompt("Enter room name for QR:");
+  if (!roomCode) return;
+  const qrcode = new QRCodeStyling({
+    width: 200,
+    height: 200,
+    data: window.location.origin + "?room=" + encodeURIComponent(roomCode),
+    dotsOptions: { color: "#000", type: "rounded" },
+    backgroundOptions: { color: "#ffffff" },
   });
+  document.getElementById("qrcode").innerHTML = "";
+  qrcode.append(document.getElementById("qrcode"));
 }
 
 function createRoom() {
-  const newRoom = document.getElementById("newRoom").value.trim();
-  if (newRoom) {
-    window.location.href = `/?room=${newRoom}`;
+  const name = document.getElementById("newRoom").value;
+  if (name) {
+    alert("Room created: " + name);
   }
 }
 
 function joinRoom() {
-  const joinRoom = document.getElementById("joinRoom").value.trim();
-  if (joinRoom) {
-    window.location.href = `/?room=${joinRoom}`;
+  const code = document.getElementById("joinRoom").value;
+  if (code) {
+    window.location.href = "?room=" + encodeURIComponent(code);
   }
 }
 
-socket.on("message", ({ room, msg }) => {
-  const div = document.createElement("div");
-  div.textContent = "📢 " + msg;
-  document.getElementById("chatbox").appendChild(div);
-});
+function recordVoice() {
+  alert("🎙 Voice recorder feature is in development.");
+}
 
-socket.on("private", ({ to, msg }) => {
-  const div = document.createElement("div");
-  div.textContent = `🔒 ${to}: ${msg}`;
-  document.getElementById("pmBox").appendChild(div);
-});
+// Auto open correct room
+window.onload = () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("room")) {
+    switchTab('groupTab');
+  } else {
+    switchTab('groupTab');
+  }
+};

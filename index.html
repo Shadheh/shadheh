@@ -1,74 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ShadsApp</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon.png" type="image/png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script defer src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('Service worker registered.'))
-        .catch(err => console.log('Service worker failed:', err));
-    }
-  </script>
 </head>
 <body>
-  <div class="tabbar">
-    <button onclick="switchTab('homeTab')">Home</button>
-    <button onclick="switchTab('groupTab')">Group</button>
-    <button onclick="switchTab('privateTab')">PM</button>
-    <button onclick="switchTab('mediaTab')">Media</button>
-    <button onclick="switchTab('qrTab')">QR</button>
-    <button onclick="switchTab('settingsTab')">⚙</button>
-  </div>
+  <div class="app-container">
+    <header class="glass-header">
+      <h1>ShadsApp</h1>
+      <div class="theme-toggle">
+        <button onclick="toggleTheme()">🌓</button>
+      </div>
+    </header>
 
-  <div id="homeTab" class="tabContent">
-    <h2>Welcome to ShadsApp</h2>
-    <input id="newRoom" placeholder="Enter room name" />
-    <button onclick="createRoom()">Create Room</button><br><br>
-    <input id="joinRoom" placeholder="Enter room to join" />
-    <button onclick="joinRoom()">Join Room</button><br><br>
-    <h3>Current Room: <span id="roomCode">ShadsRoom123</span></h3>
-  </div>
+    <div class="tab-nav">
+      <button onclick="switchTab('groupTab')">👥 Groups</button>
+      <button onclick="switchTab('pmTab')">💬 PM</button>
+      <button onclick="switchTab('mediaTab')">📎 Media</button>
+      <button onclick="switchTab('qrTab')">🔗 QR</button>
+      <button onclick="switchTab('settingsTab')">⚙️ Settings</button>
+    </div>
 
-  <div id="groupTab" class="tabContent" style="display:none;">
-    <h2>Group Chat</h2>
-    <div id="chatbox" class="box"></div>
-    <input id="msgInput" placeholder="Type a message" />
-    <button onclick="sendMessage()">Send</button>
-  </div>
+    <main class="tabContent glass-card" id="groupTab">
+      <h2>Group Chat</h2>
+      <div id="chatbox" class="message-box"></div>
+      <input id="msgInput" placeholder="Type message..." />
+      <button onclick="sendMessage()">Send</button>
+    </main>
 
-  <div id="privateTab" class="tabContent" style="display:none;">
-    <h2>Private Chat</h2>
-    <input id="pmUser" placeholder="To user..." />
-    <input id="pmInput" placeholder="Private message" />
-    <button onclick="sendPrivate()">Send PM</button>
-    <div id="pmBox" class="box"></div>
-  </div>
+    <main class="tabContent glass-card" id="pmTab" style="display:none;">
+      <h2>Private Message</h2>
+      <input id="pmUser" placeholder="To (username)" />
+      <input id="pmInput" placeholder="Your message..." />
+      <button onclick="sendPrivate()">Send</button>
+      <div id="pmBox" class="message-box"></div>
+    </main>
 
-  <div id="mediaTab" class="tabContent" style="display:none;">
-    <h2>Media Sharing</h2>
-    <input type="file" id="mediaFile" />
-    <button onclick="sendMedia()">Upload</button>
-    <div id="mediaBox" class="box"></div>
-  </div>
+    <main class="tabContent glass-card" id="mediaTab" style="display:none;">
+      <h2>Media Sharing</h2>
+      <input type="file" id="mediaFile" />
+      <button onclick="sendMedia()">Share</button>
+      <div id="mediaBox" class="message-box"></div>
+    </main>
 
-  <div id="qrTab" class="tabContent" style="display:none;">
-    <h2>Room QR Code</h2>
-    <button onclick="generateQRCode()">Generate QR</button>
-    <div id="qrcode"></div>
-  </div>
+    <main class="tabContent glass-card" id="qrTab" style="display:none;">
+      <h2>QR Room Join</h2>
+      <div id="qrcode"></div>
+      <button onclick="generateQRCode()">Generate QR</button>
+    </main>
 
-  <div id="settingsTab" class="tabContent" style="display:none;">
-    <h2>Settings</h2>
-    <button onclick="changeTheme('dark')">Dark</button>
-    <button onclick="changeTheme('light')">Light</button>
-    <button onclick="recordVoice()">🎤 Voice Record</button>
+    <main class="tabContent glass-card" id="settingsTab" style="display:none;">
+      <h2>Settings</h2>
+      <input id="newRoom" placeholder="New room name" />
+      <button onclick="createRoom()">Create</button>
+      <input id="joinRoom" placeholder="Join room code" />
+      <button onclick="joinRoom()">Join</button>
+      <button onclick="recordVoice()">🎙 Voice</button>
+    </main>
   </div>
+  <script src="app.js"></script>
 </body>
 </html>
