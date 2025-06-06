@@ -1,0 +1,44 @@
+/* 🌟 Premium Apple-style UI */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #ffffff, #f2f2f7);
+}
+#app {
+  max-width: 500px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.header {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #007aff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+#chatbox {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: #f9f9f9;
+}
+#msgInput {
+  width: 75%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+button {
+  width: 20%;
+  padding: 10px;
+  background: #007aff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+}
