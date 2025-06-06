@@ -6,6 +6,16 @@
   <title>ShadsApp</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service worker registered.'))
+        .catch(err => console.log('Service worker failed:', err));
+    }
+  </script>
 </head>
 <body>
   <div id="app">
