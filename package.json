@@ -1,6 +1,7 @@
 {
   "name": "shadsapp",
   "version": "1.0.0",
+  "description": "ShadsApp Ultimate Edition",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

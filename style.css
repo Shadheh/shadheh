@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  background: #0a0a0a;
+  font-family: sans-serif;
+  color: white;
+}
+#app {
+  padding: 20px;
+}
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+button {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.tabContent {
+  padding: 10px;
+}
+#chatbox, #pmBox, #mediaBox {
+  background: #111;
+  border-radius: 10px;
+  padding: 10px;
+  height: 200px;
+  overflow-y: scroll;
+  margin-bottom: 10px;
+}
+input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin-right: 8px;
+}

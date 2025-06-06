@@ -1,33 +1,32 @@
-
-const express = require('express');
-const http = require('http');
-const socketIO = require('socket.io');
-const path = require('path');
-
+const express = require("express");
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
+const path = require("path");
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname)));
 
-io.on('connection', (socket) => {
-  console.log('📲 New user connected');
+io.on("connection", (socket) => {
+  console.log("✅ New user connected");
 
-  
-  socket.on('media', (data) => {
-    socket.emit('media', data);
-  });
-, (msg) => {
-    io.emit('message', msg);
+  socket.on("message", (msg) => {
+    io.emit("message", msg);
   });
 
-  socket.on('private', (data) => {
-    socket.emit('private', data);
+  socket.on("private", (data) => {
+    io.emit("private", data);
+  });
+
+  socket.on("media", (data) => {
+    io.emit("media", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("❌ User disconnected");
   });
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log('✅ Server running on port', PORT);
+http.listen(PORT, () => {
+  console.log(`🚀 ShadsApp running on port ${PORT}`);
 });
-
