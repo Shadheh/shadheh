@@ -1,5 +1,10 @@
 const socket = io();
 
+let roomId = new URLSearchParams(window.location.search).get("room") || "ShadsRoom123";
+document.getElementById("roomCode").innerText = roomId;
+
+socket.emit("join", roomId);
+
 function switchTab(tabId) {
   document.querySelectorAll(".tabContent").forEach(tab => tab.style.display = "none");
   document.getElementById(tabId).style.display = "block";
@@ -8,7 +13,7 @@ function switchTab(tabId) {
 function sendMessage() {
   const msg = document.getElementById("msgInput").value;
   if (msg) {
-    socket.emit("message", msg);
+    socket.emit("message", { room: roomId, msg });
     document.getElementById("msgInput").value = "";
   }
 }
@@ -42,7 +47,17 @@ function recordVoice() {
   alert('🎤 Voice recording placeholder');
 }
 
-socket.on("message", (msg) => {
+function generateQRCode() {
+  const qrDiv = document.getElementById("qrcode");
+  qrDiv.innerHTML = "";
+  const url = `${window.location.origin}?room=${roomId}`;
+  QRCode.toCanvas(document.createElement("canvas"), url, function (error, canvas) {
+    if (error) console.error(error);
+    else qrDiv.appendChild(canvas);
+  });
+}
+
+socket.on("message", ({ room, msg }) => {
   const div = document.createElement("div");
   div.textContent = "📢 " + msg;
   document.getElementById("chatbox").appendChild(div);
@@ -53,13 +68,3 @@ socket.on("private", ({ to, msg }) => {
   div.textContent = `🔒 ${to}: ${msg}`;
   document.getElementById("pmBox").appendChild(div);
 });
-
-function generateQRCode() {
-  const roomCode = document.getElementById("roomCode").innerText;
-  const qrDiv = document.getElementById("qrcode");
-  qrDiv.innerHTML = "";
-  QRCode.toCanvas(document.createElement("canvas"), roomCode, function (error, canvas) {
-    if (error) console.error(error);
-    else qrDiv.appendChild(canvas);
-  });
-}
